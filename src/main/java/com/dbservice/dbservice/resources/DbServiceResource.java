@@ -84,6 +84,7 @@ public class DbServiceResource {
 		quotes.getQuotes().stream()
 		.map(quote -> new Quote(quotes.getUserName(), quote))
 				.forEach(quote -> {
+					System.out.println("Quotes "+quote);
 					quotesRepository.save(quote);
 				}
 
@@ -98,7 +99,7 @@ public class DbServiceResource {
 		// Quotesrepo.save(dbObj);
 
 		//}
-
+      System.out.println("Username "+quotes.getUserName());
 
 
 		return getQuotesByUserName(quotes.getUserName());
