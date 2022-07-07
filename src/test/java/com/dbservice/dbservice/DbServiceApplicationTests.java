@@ -9,26 +9,30 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class DbServiceApplicationTests {
 
 	@Autowired
 	DbServiceResource dbServiceResource;
 	@MockBean
 	QuotesRepository quotesRepository;
+
+	@LocalServerPort
+	private int port;
+
+	@Autowired
+	private TestRestTemplate restTemplate;
 
 	@Test
 	void getDbStockByUserNameTest() {
@@ -47,4 +51,17 @@ class DbServiceApplicationTests {
 				.thenReturn(Stream.of(new Quote("NIKHIL", "ICICIC")).collect(Collectors.toList()));
 		assertEquals(quotes.getQuotes(), dbServiceResource.add(quotes));
 	}
+
+	@Test
+	public void testStatusCode(){
+		Quotes quotes = new Quotes("NIKHIL", Collections.singletonList("ICICIC"));
+		ResponseEntity<String> responseEntity = this.restTemplate
+				.postForEntity("http://localhost:" + port + "/rest/db/add", quotes, String.class);
+		assertEquals(200, responseEntity.getStatusCodeValue());
+	}
+
+
+
+
+
 }
