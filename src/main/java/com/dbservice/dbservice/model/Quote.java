@@ -12,12 +12,6 @@ public class Quote {
 	@Column(name = "id")
 	private Integer id;
 
-
-	//Arun Stock1,Stock2,Stock3
-	//1 Arun Stock1
-	//2 Arun Stock2
-	//3 Arun Stock3
-
 	@Column(name = "user_name")
 	private String userName;
 
